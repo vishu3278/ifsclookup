@@ -10,6 +10,7 @@ Vue.use(VueRouter)
     name: 'Home',
     component: Home
   },
+  // { path: '/branches/:bankid', name: 'branches', component: branchList },
   {
     path: '/about',
     name: 'About',
