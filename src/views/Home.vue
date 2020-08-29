@@ -1,30 +1,34 @@
 <template>
     <div id="banks">
-        <div class="loading" v-show="loading"><img src="loading.svg" /></div>
-        <nav class="panel">
-            <p class="panel-heading" v-text="title"></p>
-            <div class="panel-block" v-if="error" v-text="error"></div>
-            <div class="panel-block">
-                <p class="control has-icons-left">
-                    <input class="input" type="text" v-model="filterquery" placeholder="Search">
-                    <span class="icon is-left">
-                        <i class="las la-search" aria-hidden="true"></i>
-                    </span>
-                </p>
-            </div>
-            <div v-if="searchFilter.length>0">
-                <router-link :to="{name: 'branches', params: {bankid: bank.id}}" v-for="(bank) in searchFilter" v-bind:key="bank.id" class="panel-block ">
-                    <span class="panel-icon" v-text="bank.id">
-                    </span> {{bank.name}}
-                </router-link>
-            </div>
-            <div v-else>
-                <router-link :to="{name: 'branches', params: {bankid: bank.id}}" v-for="(bank) in banks" v-bind:key="bank.id" class="panel-block ">
-                    <span class="panel-icon" v-text="bank.id">
-                    </span> {{bank.name}}
-                </router-link>
-            </div>
-        </nav>
+        <v-toolbar class="mb-4">
+            <v-toolbar-title v-text="title"></v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-text-field v-model="filterquery" clearable label="Search" hide-details prepend-inner-icon="mdi-magnify"></v-text-field>
+        </v-toolbar>
+        <v-alert :value="error" color="pink" border="top" icon="mdi-alert" transition="scale-transition"> {{error}}</v-alert>
+        <section class="panel">
+            <v-row v-if="searchFilter.length>0">
+                <v-col lg="3" sm="4" cols="12" v-for="(bank) in searchFilter" v-bind:key="bank.id">
+                    <v-sheet elevation="2" rounded height="100%">
+                        <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name}}" class="pa-4 d-block " style="text-decoration:none;color:#333;">
+                            {{bank.name}}
+                        </router-link>
+                    </v-sheet>
+                </v-col>
+            </v-row>
+            <v-row v-else>
+                <v-col lg="3" sm="4" cols="12" v-for="(bank) in banks" v-bind:key="bank.id">
+                    <v-sheet elevation="2" rounded height="100%">
+                        <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name}}" class="pa-3 d-block " style="text-decoration:none; color:#333;">
+                            {{bank.name}}
+                        </router-link>
+                    </v-sheet>
+                </v-col>
+            </v-row>
+            <v-overlay :value="loading">
+                <v-progress-circular indeterminate size="64"></v-progress-circular>
+            </v-overlay>
+        </section>
     </div>
 </template>
 <script>
@@ -40,7 +44,8 @@ export default {
                 { id: 2, name: "State Bank of India" }
             ],
             loading: true,
-            error: "",
+            error: false,
+            errormsg: '',
             filterquery: "",
         }
     },
@@ -54,23 +59,19 @@ export default {
                 console.log(response.data.count);
                 this.errror = response.data.count;
                 if (response.data.count > 0) {
-                    // $emit('showMessage', response.data.count + ' records found');
-                    // this.error = response.data.count + " records found";
                     this.banks = response.data.banks;
                 } else {
-                    // $emit('showMessage', 'No records found');
-                    // this.error = "No records found";
+                    this.error = true;
+                    this.errormsg = 'some error occurred';
                 }
             })
             .catch((error) => {
-                // handle error
                 console.log(error);
+                this.error = true;
+                this.errormsg = error;
             })
             .then(() => {
-                // always executed
-                // this.error = "ajax request complete";
                 this.loading = false;
-                // console.log('always executed');
             });
     },
     computed: {
@@ -79,12 +80,13 @@ export default {
             let newarray = this.banks.filter((item) => {
                 return item.name.match(regex);
             });
-            // this.filtered = newarray;
             return newarray
         },
-        /*filteredResult: function() {
-            return this.filtered = this.searchFilter;
-        }*/
     },
 }
 </script>
+<style scoped>
+.v-sheet:hover {
+    background: rgba(20, 20, 20, 0.025);
+}
+</style>

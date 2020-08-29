@@ -1,32 +1,49 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+    <v-app>
+        <v-app-bar app color="white">
+            <div class="d-flex align-center">
+                <v-img alt="Vuetify Name" class="shrink mt-1 " contain min-width="100" src="./assets/logo.png" width="100" />
+            </div>
+            <v-spacer></v-spacer>
+            <router-link to="/" class="btn mx-2">Banks</router-link>
+            <router-link to="/about" class="btn mx-2">About Us</router-link>
+        </v-app-bar>
+        <v-main>
+            <v-container>
+                <router-view />
+            </v-container>
+        </v-main>
+        <v-footer padless color="primary lighten-2 mt-5">
+            <v-row justify="center" no-gutters>
+                <v-btn v-for="link in links" :key="link" color="white" text class="my-2">
+                    {{ link }}
+                </v-btn>
+                <v-col class="primary lighten-3 py-4 text-center white--text" cols="12">
+                    {{ new Date().getFullYear() }} — <strong>IFSC Lookup</strong>
+                </v-col>
+            </v-row>
+        </v-footer>
+    </v-app>
 </template>
+<script>
+// import HelloWorld from './components/HelloWorld';
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+export default {
+    name: 'App',
 
-#nav {
-  padding: 30px;
-}
+    components: {
+        // HelloWorld,
+    },
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+    data: () => ({
+        links: [
+            'Home',
+            'About Us',
+            'Privacy',
+            'Services',
+            'Blog',
+            'Contact Us',
+        ],
+    }),
+};
+</script>
