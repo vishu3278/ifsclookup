@@ -76,7 +76,7 @@ export default {
         this.loading = true;
         axios.get('http://localhost/ifsc/api/branches.php?bank_id=' + this.$route.params.bankid)
             .then((response) => {
-                console.log(response.data.count);
+                // console.log(response.data.count);
                 // this.errror = response.data.count;
                 if (response.data.count > 1) {
                     this.error.show = true;
@@ -86,8 +86,13 @@ export default {
                     this.states = response.data.state;
                     this.state = response.data.state[0];
                     this.getBank();
+                    
+                    console.warn(response.data.count);
                 } else {
-                    this.error = "No records found";
+                        this.error.show = true;
+                        this.error.type = "warning";
+                        this.error.msg = "No branches found";
+                    // this.error = "No records found";
                 }
             })
             .catch((error) => {
@@ -98,11 +103,12 @@ export default {
             })
             .then(() => {
                 this.loading = false;
-                console.log('always executed');
+                // console.log('always executed');
             });
     },
     mounted: function() {
         this.bankname = this.$route.params.bankname;
+        window.localStorage.setItem('fquery', this.$route.params.fquery);
     },
     computed: {
 

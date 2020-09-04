@@ -10,7 +10,7 @@
             <v-row v-if="searchFilter.length>0">
                 <v-col lg="3" sm="4" cols="12" v-for="(bank) in searchFilter" v-bind:key="bank.id">
                     <v-sheet elevation="2" rounded height="100%">
-                        <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name}}" class="pa-4 d-block " style="text-decoration:none;color:#333;">
+                        <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}" class="pa-4 d-block " style="text-decoration:none;color:#333;">
                             {{bank.name}}
                         </router-link>
                     </v-sheet>
@@ -19,7 +19,7 @@
             <v-row v-else>
                 <v-col lg="3" sm="4" cols="12" v-for="(bank) in banks" v-bind:key="bank.id">
                     <v-sheet elevation="2" rounded height="100%">
-                        <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name}}" class="pa-3 d-block " style="text-decoration:none; color:#333;">
+                        <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}" class="pa-3 d-block " style="text-decoration:none; color:#333;">
                             {{bank.name}}
                         </router-link>
                     </v-sheet>
@@ -73,6 +73,7 @@ export default {
             .then(() => {
                 this.loading = false;
             });
+        this.filterquery = window.localStorage.getItem('fquery');
     },
     computed: {
         searchFilter: function() {
