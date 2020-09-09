@@ -7,21 +7,33 @@
         </v-toolbar>
         <v-alert :value="error" color="pink" border="top" icon="mdi-alert" transition="scale-transition"> {{error}}</v-alert>
         <section class="panel">
-            <v-row v-if="searchFilter.length>0">
-                <v-col lg="3" sm="4" cols="12" v-for="(bank) in searchFilter" v-bind:key="bank.id">
-                    <v-sheet elevation="2" rounded height="100%">
-                        <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}" class="pa-4 d-block " style="text-decoration:none;color:#333;">
-                            {{bank.name}}
-                        </router-link>
-                    </v-sheet>
+            <v-row>
+                <v-col md="9" cols="12">
+                    <v-row v-if="searchFilter.length>0" >
+                        <v-col lg="3" sm="4" cols="12" v-for="(bank) in searchFilter" v-bind:key="bank.id">
+                            <v-sheet elevation="2" shaped rounded height="100%">
+                                <router-link :to="{name: 'Bank', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}" class="pa-4 d-block " style="text-decoration:none;color:#333;">
+                                    {{bank.name}}
+                                </router-link>
+                            </v-sheet>
+                        </v-col>
+                    </v-row>
+                    <v-row v-else>
+                        <v-col lg="3" sm="4" cols="12" v-for="(bank) in banks" v-bind:key="bank.id">
+                            <v-sheet elevation="2" rounded height="100%">
+                                <router-link :to="{name: 'Bank', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}" class="pa-3 d-block " style="text-decoration:none; color:#333;">
+                                    {{bank.name}}
+                                </router-link>
+                            </v-sheet>
+                        </v-col>
+                    </v-row>
                 </v-col>
-            </v-row>
-            <v-row v-else>
-                <v-col lg="3" sm="4" cols="12" v-for="(bank) in banks" v-bind:key="bank.id">
-                    <v-sheet elevation="2" rounded height="100%">
-                        <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}" class="pa-3 d-block " style="text-decoration:none; color:#333;">
-                            {{bank.name}}
-                        </router-link>
+                <v-col>
+                    <v-sheet rounded outlined class="pa-3" color="light-blue lighten-5">
+                        <p class="text--secondary"><strong>IFSC</strong> code is allotted by the Reserve Bank of India (RBI) to all banks and its branches. The IFSC code of a bank can be commonly found on a bank account passbook, cheque leaf issued by the bank or on the RBI website. Any kind of fund transfer through a bank requires a valid IFSC. The different types of fund transfers are NEFT, RTGS and IMPS.</p>
+                        <h3>How to find IFSC Code?</h3>
+                        <p class="text--secondary">IFSC code can be found on cheque leaf and bank passbook of the respective bank. Banks and respective branch list of IFSC codes can be obtained from Reserve Bank of India’s website. The IFSC code of a particular bank can also be found on the banks’ official website.</p>
+                        <p class="text--secondary"><strong>MICR</strong> Code (Magnetic Ink Character Recognition) as printed on cheque book to facilitate the processing of cheques.</p>
                     </v-sheet>
                 </v-col>
             </v-row>
@@ -38,7 +50,7 @@ export default {
     name: 'Home',
     data: function() {
         return {
-            title: "Banks List",
+            title: "Banks",
             banks: [
                 { id: 1, name: "Bank of India" },
                 { id: 2, name: "State Bank of India" }
@@ -54,9 +66,9 @@ export default {
     },
     mounted: function() {
         this.loading = true;
-        axios.get('http://localhost/ifsc/api/index.php')
+        axios.get('http://wowitprojects.com/ifsclookup/api/index.php')
             .then((response) => {
-                console.log(response.data.count);
+                // console.log(response.data.count);
                 this.errror = response.data.count;
                 if (response.data.count > 0) {
                     this.banks = response.data.banks;

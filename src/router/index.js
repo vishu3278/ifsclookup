@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Branch from '../views/Branch.vue'
+import Ifsc from '../views/Ifsc.vue'
 
 Vue.use(VueRouter)
 
@@ -11,7 +12,9 @@ Vue.use(VueRouter)
     name: 'Home',
     component: Home
   },
-  { path: '/branch/:bankid', name: 'Branch', component: Branch },
+  { path: '/:state/:city/:ifsc', name:'ifsc', component: Ifsc },
+  { path: '/bank/:bankid', name: 'Bank', component: Branch },
+
   /*{
     path: '/about',
     name: 'About',

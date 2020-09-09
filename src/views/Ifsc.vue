@@ -1,21 +1,17 @@
 <template>
     <div id="banks">
         <v-sheet elevation="2" class="px-4 mb-4">
-            <v-row align="center" >
-                <v-col cols="12" sm="6">
+            <v-row align="center" no-gutters>
+                <v-col cols="12" sm="8">
                     <h4 class="">
-                        {{title}} for
+                        {{title}}
                         <span class="subtitle-1">
                             {{bankname}}
                         </span>
                     </h4>
                 </v-col>
-                <v-col cols="12" sm="3">
-                    <v-select v-model="state" @change="getCities()" :items="states" label="Select State"></v-select>
-                </v-col>
-                <v-col cols="12" sm="3">
-                    <v-select v-model="city" v-on:change="getBank()" :items="cities" label="Select City"></v-select>
-                    <!-- <v-autocomplete v-model="city" v-on:change="getBank()" :items="cities" color="white" item-text="name" label="Select City"></v-autocomplete> -->
+                <v-col cols="12" sm="4">
+                    <v-select v-model="state" @change="getBank()" :items="states" label="Select State"></v-select>
                 </v-col>
             </v-row>
         </v-sheet>
@@ -27,7 +23,7 @@
                         <div>
                             <v-card-title class="indigo--text text--darken-2" v-text="branch.adr1"></v-card-title>
                             <v-card-subtitle class="indigo--text pb-0">{{branch.adr2}} - {{branch.city}}<br>
-                                <span class="text-overline" v-text="branch.state"></span></v-card-subtitle>
+                            <span class="text-overline" v-text="branch.state"></span></v-card-subtitle>
                         </div>
                         <v-avatar class="ma-3" size="80" color="grey lighten-4" tile>
                             <v-img></v-img>
@@ -35,9 +31,7 @@
                     </div>
                     <v-card-text class="py-1">
                         <p class="mb-1" v-text="branch.adr5"></p>
-                        <p class="mb-0 blue--text text--darken-2 text-subtitle-2">
-                            <v-icon small>mdi-card-account-phone-outline</v-icon> {{branch.contact}}
-                        </p>
+                        <p class="mb-0 blue--text text--darken-2 text-subtitle-2" ><v-icon small>mdi-card-account-phone-outline</v-icon> {{branch.contact}}</p>
                     </v-card-text>
                     <v-card-actions>
                         <v-chip v-show="branch.ifsc" class="mx-1" small label color="yellow">
@@ -65,17 +59,14 @@ import axios from 'axios';
 export default {
     data: function() {
         return {
-            title: "Branch List",
-            url: "http://localhost/ifsc/api/",
+            title: "IFSC",
             bankname: '',
             branches: [
                 { id: 1, name: "Bank Name" },
                 { id: 2, name: "State Bank of India" }
             ],
             states: [],
-            cities: [],
             state: '',
-            city: '',
             loading: false,
             error: {},
             img: "https://loremflickr.com/48/48?random="
@@ -83,8 +74,7 @@ export default {
     },
     created: function() {
         this.loading = true;
-        this.bankname = this.$route.params.bankname;
-        axios.get(this.url + 'branches.php?bank_id=' + this.$route.params.bankid)
+        axios.get('http://wowitprojects.com/ifsclookup/api/branches.php?bank_id=' + this.$route.params.bankid)
             .then((response) => {
                 // console.log(response.data.count);
                 // this.errror = response.data.count;
@@ -95,15 +85,13 @@ export default {
                     // this.branches = response.data.branches;
                     this.states = response.data.state;
                     this.state = response.data.state[0];
-                    if (this.state != '') {
-                        this.getCities();
-                    }
-
-                    // console.warn(response.data.count);
+                    this.getBank();
+                    
+                    console.warn(response.data.count);
                 } else {
-                    this.error.show = true;
-                    this.error.type = "warning";
-                    this.error.msg = "No branches found";
+                        this.error.show = true;
+                        this.error.type = "warning";
+                        this.error.msg = "No branches found";
                     // this.error = "No records found";
                 }
             })
@@ -119,12 +107,8 @@ export default {
             });
     },
     mounted: function() {
-        // this.bankname = this.$route.params.bankname;
-        window.localStorage.setItem('fquery', this.$route.params.fquery?this.$route.params.fquery:'');
-
-        if (this.city) {
-            this.getCities()
-        }
+        this.bankname = this.$route.params.bankname;
+        window.localStorage.setItem('fquery', this.$route.params.fquery);
     },
     computed: {
 
@@ -135,27 +119,9 @@ export default {
                 return item.id < 10;
             });
         },
-        getCities: function() {
-            axios.get(this.url + 'city.php?bank_id=' + this.$route.params.bankid + '&state=' + this.state)
-            .then((response)=>{
-                if (response.data.count > 0) {
-                    this.cities = response.data.cities;
-                    this.city = response.data.cities[0];
-                    this.getBank();
-                } else {
-                    this.city = 'No city found';
-                }
-            })
-            .catch((error)=>{
-                console.log(error)
-            })
-            .then(()=>{
-                console.log('always executed')
-            })
-        },
         getBank: function() {
             this.loading = true;
-            axios.get(this.url + 'branch.php?bank_id=' + this.$route.params.bankid + '&state=' + this.state + '&city=' + this.city)
+            axios.get('http://wowitprojects.com/ifsclookup/api/branch.php?bank_id=' + this.$route.params.bankid + '&state=' + this.state)
                 .then((response) => {
                     if (response.data.count > 0) {
                         this.branches = response.data.banks;
