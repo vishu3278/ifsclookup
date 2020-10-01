@@ -1,19 +1,17 @@
 <template>
     <div id="banks">
-        <v-sheet elevation="2" class="px-4 mb-4">
+        <h1 class="mb-3 indigo--text text--darken-2">{{bankname}}</h1>
+        <v-sheet v-show="error.type == 'success'" elevation="2" class="px-4 mb-4">
             <v-row align="center" >
-                <v-col cols="12" sm="6">
+                <v-col cols="12" sm="4" md="6">
                     <h4 class="">
-                        {{title}} for
-                        <span class="subtitle-1">
-                            {{bankname}}
-                        </span>
+                        {{title}} 
                     </h4>
                 </v-col>
-                <v-col cols="12" sm="3">
+                <v-col cols="12" sm="4" md="3">
                     <v-select v-model="state" @change="getCities()" :items="states" label="Select State"></v-select>
                 </v-col>
-                <v-col cols="12" sm="3">
+                <v-col cols="12" sm="4" md="3">
                     <v-select v-model="city" v-on:change="getBank()" :items="cities" label="Select City"></v-select>
                     <!-- <v-autocomplete v-model="city" v-on:change="getBank()" :items="cities" color="white" item-text="name" label="Select City"></v-autocomplete> -->
                 </v-col>
@@ -30,7 +28,7 @@
                                 <span class="text-overline" v-text="branch.state"></span></v-card-subtitle>
                         </div>
                         <v-avatar class="ma-3" size="80" color="grey lighten-4" tile>
-                            <v-img></v-img>
+                            <v-img :src="logo" contain></v-img>
                         </v-avatar>
                     </div>
                     <v-card-text class="py-1">
@@ -40,12 +38,12 @@
                         </p>
                     </v-card-text>
                     <v-card-actions>
-                        <v-chip v-show="branch.ifsc" class="mx-1" small label color="yellow">
+                        <v-chip v-show="branch.ifsc" class="mx-1" small label color="amber ">
                             IFSC
                             <v-divider vertical class="mx-2"></v-divider>
                             {{branch.ifsc}}
                         </v-chip>
-                        <v-chip v-show="branch.micr" class="mx-1" small label color="yellow darken-1">
+                        <v-chip v-show="branch.micr" class="mx-1" small label color="orange lighten-2">
                             MICR
                             <v-divider vertical class="mx-2"></v-divider>
                             {{branch.micr}}
@@ -63,14 +61,24 @@
 import axios from 'axios';
 
 export default {
+    metaInfo() {
+        return {  
+            title: 'Filter by State and City',
+            meta: [
+                { name: 'keywords', content: this.bankname + ' in ' + this.city + ', ' + this.state },
+                { name: 'title', content: this.bankname + ' in ' + this.city + ', ' + this.state },
+                { name: 'description', content: 'IFSC and MICR Codes of ' + this.bankname + ' in '+ this.city + ', ' + this.state }
+            ]
+        }
+    },
     data: function() {
         return {
-            title: "Branch List",
-            url: "http://localhost/ifsc/api/",
+            title: "Filter by State and City",
             bankname: '',
+            logo:'',
             branches: [
                 { id: 1, name: "Bank Name" },
-                { id: 2, name: "State Bank of India" }
+                { id: 2, name: "State Bank" }
             ],
             states: [],
             cities: [],
@@ -81,13 +89,43 @@ export default {
             img: "https://loremflickr.com/48/48?random="
         }
     },
+    beforeRouteEnter(to, from, next) {
+        // console.log(from.name, to.name);
+
+        if (from.name != "Home") {
+            console.log(to, from, next);
+            
+            next((vm)=>{
+                let bankid = to.path.replace('/bank/','');
+                console.log(bankid);
+                axios.get(process.env.VUE_APP_ROOT_API + 'index.php?bank_id=' + bankid)
+                .then((response) => {
+                    // console.log(response.data.count);
+                    vm.errror = response.data.count;
+                    if (response.data.count > 0) {
+                        vm.bankname = response.data.banks;
+                        vm.logo = response.data.logo;
+                    }else{
+                        vm.error.show = true;
+                        vm.error.type = "warning";
+                        vm.error.msg = response.data.banks;
+                    }
+                })
+                .catch((error) => {
+                    vm.error = true;
+                    vm.errormsg = error;
+                })
+            })
+        }else {
+            next()
+        }
+    },
     created: function() {
         this.loading = true;
+
         this.bankname = this.$route.params.bankname;
-        axios.get(this.url + 'branches.php?bank_id=' + this.$route.params.bankid)
+        axios.get(process.env.VUE_APP_ROOT_API + 'branches.php?bank_id=' + this.$route.params.bankid)
             .then((response) => {
-                // console.log(response.data.count);
-                // this.errror = response.data.count;
                 if (response.data.count > 1) {
                     this.error.show = true;
                     this.error.type = "success";
@@ -99,7 +137,6 @@ export default {
                         this.getCities();
                     }
 
-                    // console.warn(response.data.count);
                 } else {
                     this.error.show = true;
                     this.error.type = "warning";
@@ -120,11 +157,12 @@ export default {
     },
     mounted: function() {
         // this.bankname = this.$route.params.bankname;
-        window.localStorage.setItem('fquery', this.$route.params.fquery?this.$route.params.fquery:'');
+        const fquery = this.$route.params.fquery?this.$route.params.fquery:'';
+        window.localStorage.setItem('fquery', fquery);
 
-        if (this.city) {
+        /*if (this.city) {
             this.getCities()
-        }
+        }*/
     },
     computed: {
 
@@ -136,7 +174,7 @@ export default {
             });
         },
         getCities: function() {
-            axios.get(this.url + 'city.php?bank_id=' + this.$route.params.bankid + '&state=' + this.state)
+            axios.get(process.env.VUE_APP_ROOT_API + 'city.php?bank_id=' + this.$route.params.bankid + '&state=' + this.state)
             .then((response)=>{
                 if (response.data.count > 0) {
                     this.cities = response.data.cities;
@@ -155,16 +193,16 @@ export default {
         },
         getBank: function() {
             this.loading = true;
-            axios.get(this.url + 'branch.php?bank_id=' + this.$route.params.bankid + '&state=' + this.state + '&city=' + this.city)
+            axios.get(process.env.VUE_APP_ROOT_API + 'branch.php?bank_id=' + this.$route.params.bankid + '&state=' + this.state + '&city=' + this.city)
                 .then((response) => {
                     if (response.data.count > 0) {
                         this.branches = response.data.banks;
                         this.error.type = "success";
-                        this.error.msg = response.data.count + " records found"
+                        this.error.msg = response.data.count + " branche(s) found"
                     } else {
                         this.error.show = true;
                         this.error.type = "warning";
-                        this.error.msg = "No records found"
+                        this.error.msg = "No branches found for" + this.bankname;
                     }
                 })
                 .catch((error) => {

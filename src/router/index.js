@@ -1,10 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import VueMeta from 'vue-meta'
 import Home from '../views/Home.vue'
+import About from '../views/About.vue'
 import Branch from '../views/Branch.vue'
 import Ifsc from '../views/Ifsc.vue'
 
 Vue.use(VueRouter)
+Vue.use(VueMeta)
 
   const routes = [
   {
@@ -14,6 +17,7 @@ Vue.use(VueRouter)
   },
   { path: '/:state/:city/:ifsc', name:'ifsc', component: Ifsc },
   { path: '/bank/:bankid', name: 'Bank', component: Branch },
+  { path: '/about', name: 'About', component: About },
 
   /*{
     path: '/about',

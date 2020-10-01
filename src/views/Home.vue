@@ -48,12 +48,21 @@ import axios from 'axios';
 
 export default {
     name: 'Home',
+    metaInfo() {
+        return {
+            meta: [
+                { name: 'keywords', content: 'IFSC code, MICR code, Bank details, Search Bank' },
+                { name: 'title', content: 'IFSC and MICR code' },
+                { name: 'description', content: 'Search IFSC and MICR Codes of banks from all over India' }
+            ]
+        }
+    },
     data: function() {
         return {
             title: "Banks",
             banks: [
                 { id: 1, name: "Bank of India" },
-                { id: 2, name: "State Bank of India" }
+                { id: 2, name: "State Bank" }
             ],
             loading: true,
             error: false,
@@ -66,7 +75,7 @@ export default {
     },
     mounted: function() {
         this.loading = true;
-        axios.get('http://wowitprojects.com/ifsclookup/api/index.php')
+        axios.get(process.env.VUE_APP_ROOT_API + 'index.php')
             .then((response) => {
                 // console.log(response.data.count);
                 this.errror = response.data.count;
