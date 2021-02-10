@@ -6,31 +6,45 @@
             <v-text-field v-model="filterquery" clearable label="Search" hide-details prepend-inner-icon="mdi-magnify"></v-text-field>
         </v-toolbar>
         <v-alert :value="error" color="pink" border="top" icon="mdi-alert" transition="scale-transition"> {{error}}</v-alert>
-        <section class="panel">
+        <v-card>
             <!-- <v-container> -->
-            <v-row v-if="searchFilter.length>0" no-gutters>
-                <v-col lg="3" sm="4" cols="6" v-for="(bank) in searchFilter" v-bind:key="bank.id">
-                    <v-sheet elevation="1" height="100%">
-                        <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}" class="pa-4 d-block " style="text-decoration:none;color:#333;">
-                            {{bank.name}}
-                        </router-link>
-                    </v-sheet>
-                </v-col>
-            </v-row>
-            <v-row v-else no-gutters>
-                <v-col lg="3" sm="4" cols="6" v-for="(bank) in banks" v-bind:key="bank.id">
-                    <v-sheet elevation="1" height="100%">
-                        <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}" class="pa-3 d-block " style="text-decoration:none; color:#333;">
-                            {{bank.name}}
-                        </router-link>
-                    </v-sheet>
-                </v-col>
-            </v-row>
-        <!-- </v-container> -->
+            <v-list v-if="searchFilter.length>0">
+                <v-list-item-group>
+                    <v-list-item v-for="(bank) in searchFilter" v-bind:key="bank.id">
+                        <v-list-item-icon>
+                            {{bank.id}}
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <!-- <v-list-item-title> -->
+                                <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}">
+                                    {{bank.name}}
+                                </router-link>
+                            <!-- </v-list-item-title> -->
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list-item-group>
+            </v-list>
+            <v-list v-else>
+                <v-list-item-group>
+                    <v-list-item v-for="(bank) in banks" v-bind:key="bank.id">
+                        <v-list-item-icon>
+                            {{bank.id}}
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <!-- <v-list-item-title> -->
+                                <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}">
+                                    {{bank.name}}
+                                </router-link>
+                            <!-- </v-list-item-title> -->
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list-item-group>
+            </v-list>
+            <!-- </v-container> -->
             <v-overlay :value="loading">
                 <v-progress-circular indeterminate size="64"></v-progress-circular>
             </v-overlay>
-        </section>
+        </v-card>
     </div>
 </template>
 <script>
