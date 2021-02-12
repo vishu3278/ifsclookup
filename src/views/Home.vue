@@ -1,51 +1,42 @@
 <template>
     <div id="banks">
         <v-toolbar class="mb-4">
-            <v-toolbar-title v-text="title"></v-toolbar-title>
-            <v-spacer></v-spacer>
+            <v-toolbar-title v-text="title" class="hidden-sm-and-down"></v-toolbar-title>
+            <v-spacer class="hidden-sm-and-down"></v-spacer>
             <v-text-field v-model="filterquery" clearable label="Search" hide-details prepend-inner-icon="mdi-magnify"></v-text-field>
         </v-toolbar>
         <v-alert :value="error" color="pink" border="top" icon="mdi-alert" transition="scale-transition"> {{error}}</v-alert>
         <section class="panel">
             <v-row>
-                <v-col md="9" cols="12">
-                    <v-card>
-                        <!-- <v-container> -->
-                        <v-list v-if="searchFilter.length>0">
-                            <v-list-item-group>
-                                <v-list-item v-for="(bank) in searchFilter" v-bind:key="bank.id">
-                                    <v-list-item-icon>
-                                        {{bank.id}}
-                                    </v-list-item-icon>
-                                    <v-list-item-content>
-                                        <!-- <v-list-item-title> -->
-                                        <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}">
-                                            {{bank.name}}
-                                        </router-link>
-                                        <!-- </v-list-item-title> -->
-                                    </v-list-item-content>
-                                </v-list-item>
-                            </v-list-item-group>
-                        </v-list>
-                        <v-list v-else>
-                            <v-list-item-group>
-                                <v-list-item v-for="(bank) in banks" v-bind:key="bank.id">
-                                    <v-list-item-icon>
-                                        {{bank.id}}
-                                    </v-list-item-icon>
-                                    <v-list-item-content>
-                                        <!-- <v-list-item-title> -->
-                                        <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}">
-                                            {{bank.name}}
-                                        </router-link>
-                                        <!-- </v-list-item-title> -->
-                                    </v-list-item-content>
-                                </v-list-item>
-                            </v-list-item-group>
-                        </v-list>
+                <v-col md="8" cols="12">
+                    <!-- <v-container> -->
+                    <v-list dense v-if="searchFilter.length>0">
+                        <v-list-item v-for="(bank, index) in searchFilter" v-bind:key="index">
+                            <v-list-item-avatar tile color="blue lighten-5">
+                                {{bank.id}}
+                            </v-list-item-avatar>
+                            <v-list-item-content>
+                                <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}">
+                                    {{bank.name}}
+                                </router-link>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list>
+                    <v-list dense v-else>
+                        <v-list-item v-for="(bank, index) in banks" v-bind:key="index">
+                            <v-list-item-avatar tile color="blue lighten-5">
+                                {{bank.id}}
+                            </v-list-item-avatar>
+                            <v-list-item-content>
+                                <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}">
+                                    {{bank.name}}
+                                </router-link>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list>
                 </v-col>
                 <v-col>
-                    <v-sheet rounded outlined class="pa-3" color="light-blue lighten-5">
+                    <v-sheet rounded outlined class="pa-3" color="light-blue lighten-5" style="position:sticky; top:70px;">
                         <p class="text--secondary"><strong>IFSC</strong> code is allotted by the Reserve Bank of India (RBI) to all banks and its branches. The IFSC code of a bank can be commonly found on a bank account passbook, cheque leaf issued by the bank or on the RBI website. Any kind of fund transfer through a bank requires a valid IFSC. The different types of fund transfers are NEFT, RTGS and IMPS.</p>
                         <h3>How to find IFSC Code?</h3>
                         <p class="text--secondary">IFSC code can be found on cheque leaf and bank passbook of the respective bank. Banks and respective branch list of IFSC codes can be obtained from Reserve Bank of India’s website. The IFSC code of a particular bank can also be found on the banks’ official website.</p>
@@ -57,6 +48,9 @@
                 <v-progress-circular indeterminate size="64"></v-progress-circular>
             </v-overlay>
         </section>
+        <v-btn fab small class="go-up" @click="$vuetify.goTo(0)">
+            <v-icon>mdi-arrow-up</v-icon>
+        </v-btn>
     </div>
 </template>
 <script>
@@ -83,7 +77,7 @@ export default {
             loading: true,
             error: false,
             errormsg: '',
-            filterquery: "",
+            filterquery: '',
         }
     },
     components: {

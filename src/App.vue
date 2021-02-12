@@ -17,12 +17,13 @@
             <v-row justify="center" no-gutters>
                 <v-col class="primary lighten-3 py-4 text-center white--text" cols="12">
                     {{ new Date().getFullYear() }} — <strong>IFSC Lookup</strong>
-                    <v-btn v-for="link in links" :key="link" :to="link.url" color="white" text class="my-2">
+                    <v-btn v-for="(link, index) in links" :key="index" :to="link.url" color="white" text class="my-2">
                         {{ link.text }}
                     </v-btn>
                     <v-container>
                         <p class="text--disabled font-weight-light"><strong>Disclaimer</strong>: We have tried our best to keep the information updated as available from RBI, users are requested to confirm information with the respective bank before using the information provided. The author reserves the right not to be responsible for the topicality, correctness, completeness or quality of the information provided. Liability claims regarding damage caused by the use of any information provided, including any kind of information which is incomplete or incorrect, will therefore be rejected.</p>
                     </v-container>
+                </v-col>
                     <v-col class="primary lighten-3 py-4 text-center white--text" cols="12">
                         &copy; {{ new Date().getFullYear() }} — <strong>IFSC Lookup</strong>
                     </v-col>

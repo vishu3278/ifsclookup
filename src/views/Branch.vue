@@ -1,83 +1,68 @@
 <template>
     <div id="banks">
-        <!-- <v-sheet elevation="2" class="px-4 mb-4">
-            <v-row align="center" no-gutters>
-                <v-col cols="12" sm="8">
-                    <h4 class="">
-                        {{title}}
-                        <span class="subtitle-1">
-                            {{bankname}}
-                        </span>
-                    </h4>
-                </v-col>
-                <v-col cols="12" sm="4">
-                    <v-select v-model="state" @change="getBank()" :items="states" label="Select State"></v-select> -->
-        <h1 class="mb-3 indigo--text text--darken-2">{{bankname}}</h1>
+        
         <v-sheet v-show="error.type == 'success'" elevation="2" class="px-4 mb-4">
             <v-row align="center">
-                <v-col cols="12" sm="4" md="6">
-                    <h4 class="">
+                <v-col cols="12" sm="8" md="7">
+                    <h2 class=" indigo--text text--darken-2">{{bankname}}</h2>
+                </v-col>
+                <v-col cols="12" sm="2" md="2" class="hidden-sm-and-down">
+                    <h4 >
                         {{title}}
                     </h4>
                 </v-col>
                 <v-col cols="12" sm="4" md="3">
                     <v-select v-model="state" @change="getCities()" :items="states" label="Select State"></v-select>
                 </v-col>
-                <v-col cols="12" sm="4" md="3">
+                <!-- <v-col cols="12" sm="4" md="3">
                     <v-select v-model="city" v-on:change="getBank()" :items="cities" label="Select City"></v-select>
-                    <!-- <v-autocomplete v-model="city" v-on:change="getBank()" :items="cities" color="white" item-text="name" label="Select City"></v-autocomplete> -->
-                </v-col>
+                    <v-autocomplete v-model="city" v-on:change="getBank()" :items="cities" color="white" item-text="name" label="Select City"></v-autocomplete>
+                </v-col> -->
             </v-row>
         </v-sheet>
-        <v-alert :value="error.show" :type="error.type" text border="left" icon="mdi-alert" transition="scale-transition"> {{error.msg}}</v-alert>
+        <v-alert :value="error.show" :type="error.type" text dense border="left" icon="mdi-alert" transition="scale-transition"> {{error.msg}}</v-alert>
         <v-row>
-            <v-col cols="12" sm="6" lg="4" v-for="(branch, index) in branches" :key="index">
-                <v-card width="100%">
-                    <div class="d-flex flex-no-wrap justify-space-between">
-                        <div>
-                            <v-card-title class="indigo--text text--darken-2" v-text="branch.adr1"></v-card-title>
-                            <v-card-subtitle class="indigo--text pb-0">{{branch.adr2}} - {{branch.city}}<br>
-                                <!-- <span class="text-overline" v-text="branch.state"></span>
-                                        </v-card-subtitle>
-                                    </div>
-                                    <v-avatar class="ma-3" size="80" color="grey lighten-4" tile>
-                                        <v-img></v-img> -->
-                                <span class="text-overline" v-text="branch.state"></span></v-card-subtitle>
-                        </div>
-                        <v-avatar class="ma-3" size="80" color="grey lighten-4" tile>
-                            <v-img :src="logo" contain></v-img>
-                        </v-avatar>
-                    </div>
-                    <v-card-text class="py-1">
-                        <p class="mb-1" v-text="branch.adr5"></p>
-                        <!-- <p class="mb-0 blue--text text--darken-2 text-subtitle-2">
-            <v-icon small>mdi-card-account-phone-outline</v-icon> {{branch.contact}}</p>
-    </v-card-text>
-    <v-card-actions>
-        <v-chip v-show="branch.ifsc" class="mx-1" small label color="yellow"> -->
-                        <p class="mb-0 blue--text text--darken-2 text-subtitle-2">
-                            <v-icon small>mdi-card-account-phone-outline</v-icon> {{branch.contact}}
-                        </p>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-chip v-show="branch.ifsc" class="mx-1" small label color="amber ">
-                            IFSC
-                            <v-divider vertical class="mx-2"></v-divider>
-                            {{branch.ifsc}}
-                        </v-chip>
-                        <!-- <v-chip v-show="branch.micr" class="mx-1" small label color="yellow darken-1"> -->
-                        <v-chip v-show="branch.micr" class="mx-1" small label color="orange lighten-2">
-                            MICR
-                            <v-divider vertical class="mx-2"></v-divider>
-                            {{branch.micr}}
-                        </v-chip>
-                    </v-card-actions>
-                </v-card>
+            <v-col cols="12" sm="8">
+                <v-list three-line>
+                    <v-list-item  v-for="(branch, index) in branches" :key="index">
+                        <v-list-item-content>
+                            <v-list-item-title class="indigo--text" v-text="branch.adr1"></v-list-item-title>
+                            <v-list-item-subtitle >
+                                {{branch.adr2}} - {{branch.city}} - <span v-text="branch.state"></span>
+                            </v-list-item-subtitle>
+                            <p class="caption mb-2">
+                                <v-icon small v-if="branch.contact">mdi-phone</v-icon> {{branch.contact}}
+                            </p>
+                            <div>
+                                <v-chip v-show="branch.ifsc" small label color="light-blue lighten-4 ">
+                                    IFSC
+                                    <v-divider vertical class="mx-2"></v-divider>
+                                    {{branch.ifsc}}
+                                </v-chip>
+                                <v-chip v-show="branch.micr" class="mx-1" small label color="teal lighten-4">
+                                    MICR
+                                    <v-divider vertical class="mx-2"></v-divider>
+                                    {{branch.micr}}
+                                </v-chip>
+                            </div>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list>
+                
+            </v-col>
+            <v-col>
+                <v-sheet rounded outlined class="pa-3" color="light-blue lighten-5" style="position:sticky; top:70px;">
+                    <p class="text--secondary"><strong>IFSC</strong> code is allotted by the Reserve Bank of India (RBI) to all banks and its branches. The IFSC code of a bank can be commonly found on a bank account passbook, cheque leaf issued by the bank or on the RBI website. Any kind of fund transfer through a bank requires a valid IFSC. The different types of fund transfers are NEFT, RTGS and IMPS.</p>
+                    <h3>How to find IFSC Code?</h3>
+                    <p class="text--secondary">IFSC code can be found on cheque leaf and bank passbook of the respective bank. Banks and respective branch list of IFSC codes can be obtained from Reserve Bank of India’s website. The IFSC code of a particular bank can also be found on the banks’ official website.</p>
+                    <p class="text--secondary"><strong>MICR</strong> Code (Magnetic Ink Character Recognition) as printed on cheque book to facilitate the processing of cheques.</p>
+                </v-sheet>
             </v-col>
         </v-row>
         <v-overlay :value="loading">
             <v-progress-circular indeterminate size="64"></v-progress-circular>
         </v-overlay>
+        <v-btn fab small class="go-up" @click="$vuetify.goTo(0)"><v-icon>mdi-arrow-up</v-icon></v-btn>
     </div>
 </template>
 <script>
@@ -87,7 +72,7 @@ export default {
 
     metaInfo() {
         return {
-            title: 'Filter by State and City',
+            title: 'Filter by State',
             meta: [
                 { name: 'keywords', content: this.bankname + ' in ' + this.city + ', ' + this.state },
                 { name: 'title', content: this.bankname + ' in ' + this.city + ', ' + this.state },
@@ -97,7 +82,7 @@ export default {
     },
     data: function() {
         return {
-            title: "Filter by State and City",
+            title: "Filter by State",
             bankname: '',
             logo: '',
             branches: [
@@ -178,6 +163,7 @@ export default {
             })
             .then(() => {
                 this.loading = false;
+                window.scrollTo(0,0);
                 // console.log('always executed');
             });
     },
@@ -210,7 +196,8 @@ export default {
                     console.log(error)
                 })
                 .then(() => {
-                    console.log('always executed')
+                    // console.log('always executed')
+                    window.scrollTo(0,0);
                 })
         },
         getBank: function() {
@@ -222,11 +209,11 @@ export default {
                         this.branches = response.data.banks;
                         this.error.type = "success";
 
-                        this.error.msg = response.data.count + " branche(s) found"
+                        this.error.msg = response.data.count + " branch(es) found"
                     } else {
                         this.error.show = true;
                         this.error.type = "warning";
-                        this.error.msg = "No branches found for" + this.bankname;
+                        this.error.msg = "No branch found for" + this.bankname;
                     }
                 })
                 .catch((error) => {
@@ -235,8 +222,12 @@ export default {
                     this.error.msg = error
                 }).then(() => {
                     this.loading = false;
+                    window.scrollTo(0,0);
                 })
         }
     }
 }
 </script>
+<style>
+.go-up { position: fixed; bottom: 2em; right: 2em; z-index: 99;}
+</style>
