@@ -4,15 +4,16 @@
         <v-sheet v-show="error.type == 'success'" elevation="2" class="px-4 mb-4">
             <v-row align="center">
                 <v-col cols="12" sm="8" md="7">
-                    <h2 class=" indigo--text text--darken-2">{{bankname}}</h2>
+                    <h4 class=" indigo--text text--darken-2">{{bankname}}</h4>
                 </v-col>
                 <v-col cols="12" sm="2" md="2" class="hidden-sm-and-down">
-                    <h4 >
+                    <p>
                         {{title}}
-                    </h4>
+                    </p>
                 </v-col>
                 <v-col cols="12" sm="4" md="3">
                     <v-select v-model="state" @change="getCities()" :items="states" label="Select State"></v-select>
+                    <small v-show="error.show" class="orange--text text--darken-2" > {{error.msg}}</small>
                 </v-col>
                 <!-- <v-col cols="12" sm="4" md="3">
                     <v-select v-model="city" v-on:change="getBank()" :items="cities" label="Select City"></v-select>
@@ -20,7 +21,6 @@
                 </v-col> -->
             </v-row>
         </v-sheet>
-        <v-alert :value="error.show" :type="error.type" text dense border="left" icon="mdi-alert" transition="scale-transition"> {{error.msg}}</v-alert>
         <v-row>
             <v-col cols="12" sm="8">
                 <v-list three-line>
@@ -72,7 +72,7 @@ export default {
 
     metaInfo() {
         return {
-            title: 'Filter by State',
+            title: this.bankname,
             meta: [
                 { name: 'keywords', content: this.bankname + ' in ' + this.city + ', ' + this.state },
                 { name: 'title', content: this.bankname + ' in ' + this.city + ', ' + this.state },
@@ -82,7 +82,7 @@ export default {
     },
     data: function() {
         return {
-            title: "Filter by State",
+            title: this.bankname,
             bankname: '',
             logo: '',
             branches: [
@@ -182,7 +182,8 @@ export default {
             });
         },
         getCities: function() {
-            axios.get(process.env.VUE_APP_ROOT_API + 'city.php?bank_id=' + this.$route.params.bankid + '&state=' + this.state)
+            this.getBank();
+            /*axios.get(process.env.VUE_APP_ROOT_API + 'city.php?bank_id=' + this.$route.params.bankid + '&state=' + this.state)
                 .then((response) => {
                     if (response.data.count > 0) {
                         this.cities = response.data.cities;
@@ -198,7 +199,8 @@ export default {
                 .then(() => {
                     // console.log('always executed')
                     window.scrollTo(0,0);
-                })
+                })*/
+            window.scrollTo(0,0);
         },
         getBank: function() {
             this.loading = true;

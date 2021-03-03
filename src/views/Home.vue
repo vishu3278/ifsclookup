@@ -16,7 +16,7 @@
                                 {{bank.id}}
                             </v-list-item-avatar>
                             <v-list-item-content>
-                                <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}">
+                                <router-link :to="{name: 'Bank', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}" class="grey--text text--darken-3">
                                     {{bank.name}}
                                 </router-link>
                             </v-list-item-content>
@@ -28,7 +28,7 @@
                                 {{bank.id}}
                             </v-list-item-avatar>
                             <v-list-item-content>
-                                <router-link :to="{name: 'Branch', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}">
+                                <router-link :to="{name: 'Bank', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}" class="blue-grey--text text--darken-3">
                                     {{bank.name}}
                                 </router-link>
                             </v-list-item-content>
@@ -77,7 +77,7 @@ export default {
             loading: true,
             error: false,
             errormsg: '',
-            filterquery: '',
+            filterquery: null,
         }
     },
     components: {
@@ -85,13 +85,19 @@ export default {
     },
     mounted: function() {
         this.loading = true;
-        /*axios.get(process.env.VUE_APP_ROOT_API + 'index.php')*/
-        axios.get('http://wowitprojects.com/ifsclookup/api/index.php')
+        if (window.sessionStorage.getItem('banks')) {
+            this.banks = JSON.parse(window.sessionStorage.getItem('banks'));
+            this.loading = false;
+        } else {
+            /*axios.get(process.env.VUE_APP_ROOT_API + 'index.php')*/
+            axios.get('http://wowitprojects.com/ifsclookup/api/index.php')
             .then((response) => {
                 // console.log(response.data.count);
                 this.errror = response.data.count;
                 if (response.data.count > 0) {
                     this.banks = response.data.banks;
+                    let banks = JSON.stringify(this.banks);
+                    window.sessionStorage.setItem('banks', banks);
                 } else {
                     this.error = true;
                     this.errormsg = 'some error occurred';
@@ -105,6 +111,7 @@ export default {
             .then(() => {
                 this.loading = false;
             });
+        }
         this.filterquery = window.localStorage.getItem('fquery');
     },
     computed: {
@@ -119,7 +126,7 @@ export default {
 }
 </script>
 <style scoped>
-.v-sheet:hover {
-    background: rgba(20, 20, 20, 0.025);
+a {
+    text-decoration: none;
 }
 </style>

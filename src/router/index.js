@@ -10,15 +10,12 @@ Vue.use(VueRouter)
 Vue.use(VueMeta)
 
 
-const routes = [{
-        path: '/',
-        name: 'Home',
-        component: Home
-    },
-    { path: '/branch/:bankid', name: 'Branch', component: Branch },
-    { path: '/:state/:city/:ifsc', name: 'ifsc', component: Ifsc },
-    { path: '/bank/:bankid', name: 'Bank', component: Branch },
-    { path: '/about', name: 'About', component: About },
+const routes = [
+  { path: '/', name: 'Home', component: Home },
+  // { path: '/branch/:bankid', name: 'Branch', component: Branch },
+  { path: '/:state/:city/:ifsc', name: 'ifsc', component: Ifsc },
+  { path: '/bank/:bankid', name: 'Bank', component: Branch },
+  { path: '/about', name: 'About', component: About },
 
     /*{
       path: '/about',
