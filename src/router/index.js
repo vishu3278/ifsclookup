@@ -3,7 +3,8 @@ import VueRouter from 'vue-router'
 import VueMeta from 'vue-meta'
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
-import Branch from '../views/Branch.vue'
+/*import Branch from '../views/Branch.vue'*/
+/*import Bank from '../views/Bank.vue'*/
 import Ifsc from '../views/Ifsc.vue'
 
 Vue.use(VueRouter)
@@ -12,9 +13,9 @@ Vue.use(VueMeta)
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
-  // { path: '/branch/:bankid', name: 'Branch', component: Branch },
+  // { path: '/:bank', name: 'Bankname', component: Bank },
   { path: '/:state/:city/:ifsc', name: 'ifsc', component: Ifsc },
-  { path: '/bank/:bankid', name: 'Bank', component: Branch },
+  { path: '/bank/:bankid', name: 'Bank', component: () => import('@/views/Branch.vue') },
   { path: '/about', name: 'About', component: About },
 
     /*{

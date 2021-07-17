@@ -1,7 +1,7 @@
 <template>
     <div id="banks">
         
-        <v-sheet v-show="error.type == 'success'" elevation="1" class="px-4 mb-4">
+        <v-sheet v-show="error.type == 'success'" elevation="2" class="px-4 mb-4">
             <v-row align="center">
                 <v-col cols="12" sm="8" md="7">
                     <h4 class=" indigo--text text--darken-2">{{bankname}}</h4>
@@ -12,7 +12,7 @@
                     </p>
                 </v-col>
                 <v-col cols="12" sm="4" md="3">
-                    <v-select dense v-model="state" @change="getCities()" :items="states" label="Select State"></v-select>
+                    <v-select v-model="state" @change="getCities()" :items="states" label="Select State"></v-select>
                     <small v-show="error.show" class="orange--text text--darken-2" > {{error.msg}}</small>
                 </v-col>
                 <!-- <v-col cols="12" sm="4" md="3">
