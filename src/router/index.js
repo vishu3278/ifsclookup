@@ -10,22 +10,12 @@ import Ifsc from '../views/Ifsc.vue'
 Vue.use(VueRouter)
 Vue.use(VueMeta)
 
-
 const routes = [
   { path: '/', name: 'Home', component: Home },
   // { path: '/:bank', name: 'Bankname', component: Bank },
   { path: '/:state/:city/:ifsc', name: 'ifsc', component: Ifsc },
   { path: '/bank/:bankid', name: 'Bank', component: () => import('@/views/Branch.vue') },
   { path: '/about', name: 'About', component: About },
-
-    /*{
-      path: '/about',
-      name: 'About',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/About.vue')
-    }*/
 ]
 
 const router = new VueRouter({

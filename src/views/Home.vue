@@ -17,7 +17,7 @@
                             </v-list-item-avatar>
                             <v-list-item-content>
                                 <router-link :to="{name: 'Bank', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}" class="grey--text text--darken-3">
-                                    {{bank.name}}
+                                    {{bank.name}}<br>{{slug(bank.name)}}
                                 </router-link>
                             </v-list-item-content>
                         </v-list-item>
@@ -29,7 +29,7 @@
                             </v-list-item-avatar>
                             <v-list-item-content>
                                 <router-link :to="{name: 'Bank', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}" class="blue-grey--text text--darken-3">
-                                    {{bank.name}}
+                                    {{bank.name}}<br>{{slug(bank.name)}}
                                 </router-link>
                             </v-list-item-content>
                         </v-list-item>
@@ -90,7 +90,7 @@ export default {
             this.loading = false;
         } else {
             /*axios.get(process.env.VUE_APP_ROOT_API + 'index.php')*/
-            axios.get('http://wowitprojects.com/ifsclookup/api/index.php')
+            axios.get(process.env.VUE_APP_ROOT_API + 'index.php')
             .then((response) => {
                 // console.log(response.data.count);
                 this.errror = response.data.count;
@@ -122,7 +122,13 @@ export default {
             });
             return newarray
         },
+        
     },
+    methods: {
+        slug(bankname){
+            return bankname.toLowerCase().replace(/[ ]/g, '-')
+        }
+    }
 }
 </script>
 <style scoped>

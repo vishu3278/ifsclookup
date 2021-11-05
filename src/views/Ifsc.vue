@@ -74,7 +74,7 @@ export default {
     },
     created: function() {
         this.loading = true;
-        axios.get('http://wowitprojects.com/ifsclookup/api/branches.php?bank_id=' + this.$route.params.bankid)
+        axios.get(process.env.VUE_APP_ROOT_API + 'branches.php?bank_id=' + this.$route.params.bankid)
             .then((response) => {
                 // console.log(response.data.count);
                 // this.errror = response.data.count;
@@ -121,7 +121,7 @@ export default {
         },
         getBank: function() {
             this.loading = true;
-            axios.get('http://wowitprojects.com/ifsclookup/api/branch.php?bank_id=' + this.$route.params.bankid + '&state=' + this.state)
+            axios.get(process.env.VUE_APP_ROOT_API + 'branch.php?bank_id=' + this.$route.params.bankid + '&state=' + this.state)
                 .then((response) => {
                     if (response.data.count > 0) {
                         this.branches = response.data.banks;
