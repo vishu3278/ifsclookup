@@ -14,7 +14,7 @@ const routes = [
   { path: '/', name: 'Home', component: Home },
   // { path: '/:bank', name: 'Bankname', component: Bank },
   { path: '/:state/:city/:ifsc', name: 'ifsc', component: Ifsc },
-  { path: '/bank/:bankid', name: 'Bank', component: () => import('@/views/Branch.vue') },
+  { path: '/bank/:slug', name: 'Bank', component: () => import('@/views/Branch.vue') },
   { path: '/about', name: 'About', component: About },
 ]
 

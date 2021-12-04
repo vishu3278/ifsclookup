@@ -16,8 +16,8 @@
                                 {{bank.id}}
                             </v-list-item-avatar>
                             <v-list-item-content>
-                                <router-link :to="{name: 'Bank', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}" class="grey--text text--darken-3">
-                                    {{bank.name}}<br>{{slug(bank.name)}}
+                                <router-link :to="{name: 'Bank', params: {bankid: bank.id, bankname: bank.name, slug: bank.slug, fquery: filterquery}}" class="grey--text text--darken-3">
+                                    {{bank.name}}<br>{{bank.slug}}
                                 </router-link>
                             </v-list-item-content>
                         </v-list-item>
@@ -28,8 +28,8 @@
                                 {{bank.id}}
                             </v-list-item-avatar>
                             <v-list-item-content>
-                                <router-link :to="{name: 'Bank', params: {bankid: bank.id, bankname: bank.name, fquery: filterquery}}" class="blue-grey--text text--darken-3">
-                                    {{bank.name}}<br>{{slug(bank.name)}}
+                                <router-link :to="{name: 'Bank', params: {bankid: bank.id, bankname: bank.name, slug: bank.slug, fquery: filterquery}}" class="blue-grey--text text--darken-3">
+                                    {{bank.name}}<br>{{bank.slug}}
                                 </router-link>
                             </v-list-item-content>
                         </v-list-item>
