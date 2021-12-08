@@ -2,7 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import Vuex from 'vuex'
-import vuetify from './plugins/vuetify';
+// import vuetify from './plugins/vuetify';
+import '../node_modules/bulma/bulma.sass'
+import './assets/style.css';
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
@@ -30,7 +32,7 @@ const store = new Vuex.Store({
 
 new Vue({
   router,
-  vuetify,
+  // vuetify,
   store,
   render: h => h(App)
 }).$mount('#app')
