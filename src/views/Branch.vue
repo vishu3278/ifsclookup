@@ -1,34 +1,36 @@
 <template>
     <div id="banks">
-        
-        <v-sheet v-show="error.type == 'success'" elevation="1" class="px-4 mb-4">
-            <v-row align="center">
-                <v-col cols="12" sm="8" md="7">
-                    <h4 class=" indigo--text text--darken-2">{{bankname}}</h4>
-                </v-col>
-                <v-col cols="12" sm="2" md="2" class="hidden-sm-and-down">
-                    <p>
-                        {{title}}
-                    </p>
-                </v-col>
-                <v-col cols="12" sm="4" md="3">
-                    <v-select dense v-model="state" @change="getCities()" :items="states" label="Select State"></v-select>
-                    <small v-show="error.show" class="orange--text text--darken-2" > {{error.msg}}</small>
-                </v-col>
-                <!-- <v-col cols="12" sm="4" md="3">
+        <v-row>
+            <v-col cols="12" sm="8">
+                <v-sheet v-show="error.type == 'success'" elevation="1" class="px-4 mb-4">
+                    <v-row align="center">
+                        <v-col cols="12" sm="8" md="7">
+                            <h4 class=" indigo--text text--darken-2">{{bankname}}</h4>
+                        </v-col>
+                        <v-col cols="12" sm="2" md="2" class="hidden-sm-and-down">
+                            <p>
+                                {{title}}
+                            </p>
+                        </v-col>
+                        <v-col cols="12" sm="4" md="3">
+                            <v-select dense v-model="state" @change="getCities()" :items="states" label="Select State"></v-select>
+                            <small v-show="error.show" class="orange--text text--darken-2"> {{error.msg}}</small>
+                        </v-col>
+                        <!-- <v-col cols="12" sm="4" md="3">
                     <v-select v-model="city" v-on:change="getBank()" :items="cities" label="Select City"></v-select>
                     <v-autocomplete v-model="city" v-on:change="getBank()" :items="cities" color="white" item-text="name" label="Select City"></v-autocomplete>
                 </v-col> -->
-            </v-row>
-        </v-sheet>
-        <v-row>
-            <v-col cols="12" sm="8">
+                    </v-row>
+                </v-sheet>
                 <v-list three-line>
-                    <v-list-item  v-for="(branch, index) in branches" :key="index">
+                    <v-list-item v-for="(branch, index) in branches" :key="index">
                         <v-list-item-content>
                             <v-list-item-title class="indigo--text" v-text="branch.adr1"></v-list-item-title>
-                            <v-list-item-subtitle >
+                            <v-list-item-subtitle>
                                 {{branch.adr2}} - {{branch.city}} - <span v-text="branch.state"></span>
+                            </v-list-item-subtitle>
+                            <v-list-item-subtitle>
+                                {{branch.adr5}}
                             </v-list-item-subtitle>
                             <p class="caption mb-2">
                                 <v-icon small v-if="branch.contact">mdi-phone</v-icon> {{branch.contact}}
@@ -48,7 +50,6 @@
                         </v-list-item-content>
                     </v-list-item>
                 </v-list>
-                
             </v-col>
             <v-col>
                 <v-sheet rounded outlined class="pa-3" color="light-blue lighten-5" style="position:sticky; top:70px;">
@@ -62,7 +63,9 @@
         <v-overlay :value="loading">
             <v-progress-circular indeterminate size="64"></v-progress-circular>
         </v-overlay>
-        <v-btn fab small class="go-up" @click="$vuetify.goTo(0)"><v-icon>mdi-arrow-up</v-icon></v-btn>
+        <v-btn fab small class="go-up" @click="$vuetify.goTo(0)">
+            <v-icon>mdi-arrow-up</v-icon>
+        </v-btn>
     </div>
 </template>
 <script>
@@ -163,7 +166,7 @@ export default {
             })
             .then(() => {
                 this.loading = false;
-                window.scrollTo(0,0);
+                window.scrollTo(0, 0);
                 // console.log('always executed');
             });
     },
@@ -200,7 +203,7 @@ export default {
                     // console.log('always executed')
                     window.scrollTo(0,0);
                 })*/
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
         },
         getBank: function() {
             this.loading = true;
@@ -224,12 +227,17 @@ export default {
                     this.error.msg = error
                 }).then(() => {
                     this.loading = false;
-                    window.scrollTo(0,0);
+                    window.scrollTo(0, 0);
                 })
         }
     }
 }
 </script>
 <style>
-.go-up { position: fixed; bottom: 2em; right: 2em; z-index: 99;}
+.go-up {
+    position: fixed;
+    bottom: 2em;
+    right: 2em;
+    z-index: 99;
+}
 </style>
