@@ -1,75 +1,71 @@
 <template>
-    <div id="banks">
-        <v-row>
-            <v-col cols="12" sm="8">
-                <v-sheet v-show="error.type == 'success'" elevation="1" class="px-4 mb-4">
-                    <v-row align="center">
-                        <v-col cols="12" sm="8" md="7">
-                            <h4 class=" indigo--text text--darken-2">{{bankname}}</h4>
-                        </v-col>
-                        <v-col cols="12" sm="2" md="2" class="hidden-sm-and-down">
-                            <p>
-                                {{title}}
-                            </p>
-                        </v-col>
-                        <v-col cols="12" sm="4" md="3">
-                            <v-select dense v-model="state" @change="getCities()" :items="states" label="Select State"></v-select>
-                            <small v-show="error.show" class="orange--text text--darken-2"> {{error.msg}}</small>
-                        </v-col>
-                        <!-- <v-col cols="12" sm="4" md="3">
-                    <v-select v-model="city" v-on:change="getBank()" :items="cities" label="Select City"></v-select>
-                    <v-autocomplete v-model="city" v-on:change="getBank()" :items="cities" color="white" item-text="name" label="Select City"></v-autocomplete>
-                </v-col> -->
-                    </v-row>
-                </v-sheet>
-                <v-list three-line>
-                    <v-list-item v-for="(branch, index) in branches" :key="index">
-                        <v-list-item-content>
-                            <v-list-item-title class="indigo--text" v-text="branch.adr1"></v-list-item-title>
-                            <v-list-item-subtitle>
+    <div id="branch">
+        <div class="columns">
+            <div class="column">
+                <section class="panel p-3">
+                    <h4 class=" indigo--text text--darken-2">{{bankname}}</h4>
+                    <p>
+                        {{title}}
+                    </p>
+                    <v-sheet v-show="error.type == 'success'" elevation="1" class="px-4 mb-4">
+                        <v-select dense v-model="state" @change="getCities()" :items="states" label="Select State"></v-select>
+                        <small v-show="error.show" class="orange--text text--darken-2"> {{error.msg}}</small>
+                    </v-sheet>
+                    <article class="media" v-for="(branch, index) in branches" :key="index">
+                        <div class="media-content">
+                            <h6 class="m-0 has-text-black" v-text="branch.adr1"></h6>
+                            <p class="m-0">
                                 {{branch.adr2}} - {{branch.city}} - <span v-text="branch.state"></span>
-                            </v-list-item-subtitle>
-                            <v-list-item-subtitle>
-                                {{branch.adr5}}
-                            </v-list-item-subtitle>
-                            <p class="caption mb-2">
-                                <v-icon small v-if="branch.contact">mdi-phone</v-icon> {{branch.contact}}
                             </p>
-                            <div>
-                                <v-chip v-show="branch.ifsc" small label color="light-blue lighten-4 ">
+                            <p class="m-0">
+                                {{branch.adr5}}
+                            </p>
+                            <p class="mb-2">
+                                <span class="icon icon-phone" v-if="branch.contact"></span> {{branch.contact}}
+                            </p>
+                            <div class="field is-grouped">
+                                <div class="control" v-show="branch.ifsc">
+                                    <div class="tags has-addons">
+                                        <span class="tag ">IFSC</span>
+                                        <span class="tag is-link is-light">{{branch.ifsc}}</span>
+                                    </div>
+                                </div>
+                                <div class="control" v-show="branch.micr">
+                                    <div class="tags has-addons">
+                                        <span class="tag">MICR</span>
+                                        <span class="tag is-info is-light">{{branch.micr}}</span>
+                                    </div>
+                                </div>
+                                <!-- <v-chip v-show="branch.ifsc" small label color="light-blue lighten-4 ">
                                     IFSC
                                     <v-divider vertical class="mx-2"></v-divider>
                                     {{branch.ifsc}}
-                                </v-chip>
-                                <v-chip v-show="branch.micr" class="mx-1" small label color="teal lighten-4">
+                                </v-chip> -->
+                                <!-- <v-chip v-show="branch.micr" class="mx-1" small label color="teal lighten-4">
                                     MICR
                                     <v-divider vertical class="mx-2"></v-divider>
                                     {{branch.micr}}
-                                </v-chip>
+                                </v-chip> -->
                             </div>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-list>
-            </v-col>
-            <v-col>
-                <v-sheet rounded outlined class="pa-3" color="light-blue lighten-5" style="position:sticky; top:70px;">
-                    <p class="text--secondary"><strong>IFSC</strong> code is allotted by the Reserve Bank of India (RBI) to all banks and its branches. The IFSC code of a bank can be commonly found on a bank account passbook, cheque leaf issued by the bank or on the RBI website. Any kind of fund transfer through a bank requires a valid IFSC. The different types of fund transfers are NEFT, RTGS and IMPS.</p>
-                    <h3>How to find IFSC Code?</h3>
-                    <p class="text--secondary">IFSC code can be found on cheque leaf and bank passbook of the respective bank. Banks and respective branch list of IFSC codes can be obtained from Reserve Bank of India’s website. The IFSC code of a particular bank can also be found on the banks’ official website.</p>
-                    <p class="text--secondary"><strong>MICR</strong> Code (Magnetic Ink Character Recognition) as printed on cheque book to facilitate the processing of cheques.</p>
-                </v-sheet>
-            </v-col>
-        </v-row>
+                        </div>
+                        <figure class="media-right">
+                            {{branch.id}}
+                        </figure>
+                    </article>
+                </section>
+            </div>
+            <div class="column is-two-fifths">
+                <AppSidebar />
+            </div>
+        </div>
         <v-overlay :value="loading">
             <v-progress-circular indeterminate size="64"></v-progress-circular>
         </v-overlay>
-        <v-btn fab small class="go-up" @click="$vuetify.goTo(0)">
-            <v-icon>mdi-arrow-up</v-icon>
-        </v-btn>
     </div>
 </template>
 <script>
 import axios from 'axios';
+import AppSidebar from '@/components/AppSidebar'
 
 export default {
 
@@ -101,7 +97,9 @@ export default {
             img: "https://loremflickr.com/48/48?random="
         }
     },
-
+    components: {
+        AppSidebar
+    },
     beforeRouteEnter(to, from, next) {
         // console.log(from.name, to.name);
 
@@ -213,8 +211,9 @@ export default {
                     if (response.data.count > 0) {
                         this.branches = response.data.banks;
                         this.error.type = "success";
-
                         this.error.msg = response.data.count + " branch(es) found"
+                        this.$emit('bankname', {bankname: this.bankname, branchNos: response.data.count})
+
                     } else {
                         this.error.show = true;
                         this.error.type = "warning";
@@ -233,11 +232,8 @@ export default {
     }
 }
 </script>
-<style>
-.go-up {
-    position: fixed;
-    bottom: 2em;
-    right: 2em;
-    z-index: 99;
-}
+<style scoped>
+/*.media-right {
+    flex-basis: 10%;
+}*/
 </style>
