@@ -5,8 +5,7 @@
             <div class="control has-icons-left">
                 <input type="text" class="input" v-model="filterquery" placeholder="Search">
                 <span class="icon is-small is-left">
-                    <span class="icon icon-search"></span>
-                    <!-- <i class="fas fa-user"></i> -->
+                    <span class="icon-search"></span>
                 </span>
             </div>
         </div>
@@ -21,11 +20,26 @@ export default {
     name: 'AppSearch',
     data() {
         return {
+            timeout: null,
+            debouncedInput: '',
             error: false,
             errormsg: '',
-            filterquery: null,
         }
-    }
+    },
+    computed: {
+        filterquery: {
+            get() {
+                return this.debouncedInput;
+            },
+            set(val) {
+                if (this.timeout) clearTimeout(this.timeout);
+                this.timeout = setTimeout(() => {
+                    this.debouncedInput = val;
+                    this.$store.dispatch('searched', this.debouncedInput)
+                }, 600);
+            }
+        }
+    },
 }
 </script>
 <style lang="css" scoped>

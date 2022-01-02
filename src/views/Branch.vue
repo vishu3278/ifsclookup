@@ -2,22 +2,31 @@
     <div id="branch">
         <div class="columns">
             <div class="column">
+                <div v-show="error.type == 'success'" class="notification is-warning">
+                    <div class="level">
+                        <div class="level-left"><label class="is-size-7 mr-2">Select State</label> 
+                            <div class="control has-icons-left">
+                                <div class="select is-small">
+                                    <select v-model="state" @change="getCities()">
+                                        <option :value="s" v-for="s in states" :key="s">{{s}}</option>
+                                    </select>
+                                </div>
+                                <div class="icon is-left">
+                                    <span class="icon-globe"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="level-right"><small v-show="error.show"> {{error.msg}}</small></div>
+                    </div>
+                </div>
                 <section class="panel p-3">
-                    <h4 class=" indigo--text text--darken-2">{{bankname}}</h4>
-                    <p>
-                        {{title}}
-                    </p>
-                    <v-sheet v-show="error.type == 'success'" elevation="1" class="px-4 mb-4">
-                        <v-select dense v-model="state" @change="getCities()" :items="states" label="Select State"></v-select>
-                        <small v-show="error.show" class="orange--text text--darken-2"> {{error.msg}}</small>
-                    </v-sheet>
                     <article class="media" v-for="(branch, index) in branches" :key="index">
                         <div class="media-content">
-                            <h6 class="m-0 has-text-black" v-text="branch.adr1"></h6>
-                            <p class="m-0">
+                            <h6 class="m-0 has-text-primary-dark has-text-weight-bold" v-text="branch.adr1"></h6>
+                            <p class="m-0 has-text-info">
                                 {{branch.adr2}} - {{branch.city}} - <span v-text="branch.state"></span>
                             </p>
-                            <p class="m-0">
+                            <p class="m-0" style="word-break: break-all">
                                 {{branch.adr5}}
                             </p>
                             <p class="mb-2">
@@ -48,7 +57,7 @@
                                 </v-chip> -->
                             </div>
                         </div>
-                        <figure class="media-right">
+                        <figure class="media-right image is-64x64">
                             {{branch.id}}
                         </figure>
                     </article>
@@ -173,9 +182,6 @@ export default {
         const fquery = this.$route.params.fquery ? this.$route.params.fquery : '';
         window.localStorage.setItem('fquery', fquery);
     },
-    computed: {
-
-    },
     methods: {
         searchFilter: function() {
             this.branches.filter((item) => {
@@ -212,7 +218,7 @@ export default {
                         this.branches = response.data.banks;
                         this.error.type = "success";
                         this.error.msg = response.data.count + " branch(es) found"
-                        this.$emit('bankname', {bankname: this.bankname, branchNos: response.data.count})
+                        this.$emit('bankname', { bankname: this.bankname, branchNos: response.data.count })
 
                     } else {
                         this.error.show = true;

@@ -11,7 +11,7 @@
                 <section class="panel p-3">
                     <template v-if="searchFilter.length>0">
                         <article class="media" v-for="(bank, index) in searchFilter" v-bind:key="index">
-                            <div class="media-left" >
+                            <div class="media-left">
                                 {{bank.id}}
                             </div>
                             <div class="media-content">
@@ -23,7 +23,7 @@
                     </template>
                     <template v-else>
                         <article v-for="(bank, index) in banks" v-bind:key="index">
-                            <div class="media-left" >
+                            <div class="media-left">
                                 {{bank.id}}
                             </div>
                             <div class="media-content">
@@ -44,6 +44,7 @@
 <script>
 import axios from 'axios';
 import AppSidebar from '@/components/AppSidebar'
+import { mapGetters } from 'vuex';
 
 export default {
     name: 'Home',
@@ -71,6 +72,19 @@ export default {
     },
     components: {
         AppSidebar
+    },
+    created() {
+        this.$emit('no-hero', true)
+    },
+    computed: {
+        ...mapGetters['getSearchString'],
+        searchFilter() {
+            var regex = new RegExp(this.getSearchString, 'gi');
+            let newarray = this.banks.filter((item) => {
+                return item.name.match(regex);
+            });
+            return newarray
+        },
     },
     mounted: function() {
         this.loading = true;
@@ -101,23 +115,7 @@ export default {
                     this.loading = false;
                 });
         }
-        this.filterquery = window.localStorage.getItem('fquery');
     },
-    computed: {
-        searchFilter: function() {
-            var regex = new RegExp(this.filterquery, 'gi');
-            let newarray = this.banks.filter((item) => {
-                return item.name.match(regex);
-            });
-            return newarray
-        },
-
-    },
-    methods: {
-        slug(bankname) {
-            return bankname.toLowerCase().replace(/[ ]/g, '-')
-        }
-    }
 }
 </script>
 <style scoped>

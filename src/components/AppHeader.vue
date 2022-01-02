@@ -17,6 +17,7 @@
                 <!-- <div class="navbar-item"> -->
                 <router-link to="/" exact active-class="red--text" class="navbar-item">Home</router-link>
                 <router-link to="/about" active-class="red--text" class="navbar-item">About Us</router-link>
+                <router-link to="/contact" active-class="red--text" class="navbar-item">Contact</router-link>
             </div>
         </div>
     </nav>
@@ -26,10 +27,16 @@ export default {
     name: 'AppHeader',
     data() {
         return {
-
+            menuActive: false
         }
     },
     // props: ['links']
+    methods: {
+        menuToggle(){
+            console.log('menu toggle')
+            this.menuActive = !this.menuActive
+        }
+    }
 }
 </script>
 <style lang="css" scoped>

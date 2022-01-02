@@ -1,7 +1,7 @@
 <template>
     <div>
         <AppHeader />
-        <section class="hero is-small is-info">
+        <section class="hero is-small is-info" v-if="hero">
             <div class="hero-body">
                 <div class="container">
                     <div class="columns">
@@ -22,7 +22,7 @@
         </section>
         <main class="main">
             <div class="container">
-                <router-view v-on:bankname="updatebankname" />
+                <router-view v-on:bankname="updatebankname" v-on:no-hero="displayHero" />
             </div>
         </main>
         <AppFooter :links="links" />
@@ -56,7 +56,8 @@ export default {
                 { text: 'Privacy', url: '/privacy' },
                 { text: 'Contact Us', url: '/contact' },
             ],
-            menuActive: false
+            menuActive: false,
+            hero: true,
         }
     },
     methods: {
@@ -66,6 +67,9 @@ export default {
         updatebankname($event){
             this.pagetitle = $event.bankname
             this.subtitle = $event.branchNos + " Branch(es) found"
+        },
+        displayHero($event){
+            this.hero = $event
         }
     }
 };
