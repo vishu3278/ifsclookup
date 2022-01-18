@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         <figure class="media-right image is-64x64">
-                            {{branch.id}}
+                            <img :src="logo" :alt="bankname">
                         </figure>
                     </article>
                 </section>
@@ -110,15 +110,15 @@ export default {
         AppSidebar
     },
     beforeRouteEnter(to, from, next) {
-        // console.log(from.name, to.name);
+        console.log(from.name, to.name);
 
         if (from.name != "Home") {
             // console.log(to, from, next);
 
             next((vm) => {
-                let bankid = to.path.replace('/bank/', '');
-                console.log(bankid);
-                axios.get(process.env.VUE_APP_ROOT_API + 'index.php?bank_id=' + bankid)
+                let bankName = to.path.replace('/bank/', '');
+                console.log(bankName);
+                axios.get(process.env.VUE_APP_ROOT_API + 'index.php?bank_id=' + bankName)
                     .then((response) => {
                         // console.log(response.data.count);
                         vm.errror = response.data.count;
@@ -144,15 +144,16 @@ export default {
         this.loading = true;
 
         this.bankname = this.$route.params.bankname;
-        axios.get(process.env.VUE_APP_ROOT_API + 'branches.php?bank_id=' + this.$route.params.bankid)
+        axios.get(process.env.VUE_APP_ROOT_API + 'branchstates.php?bank_id=' + this.$route.params.bankid)
             .then((response) => {
-                if (response.data.count > 1) {
+                if (response.data.count >= 1) {
                     this.error.show = true;
                     this.error.type = "success";
                     this.error.msg = response.data.count + " states found for " + this.bankname;
                     // this.branches = response.data.branches;
                     this.states = response.data.state;
                     this.state = response.data.state[0];
+                    this.logo = `${process.env.VUE_APP_LOGO_PATH}` + response.data.logo;
 
                     if (this.state != '') {
                         this.getCities();
@@ -211,7 +212,7 @@ export default {
         },
         getBank: function() {
             this.loading = true;
-            axios.get(process.env.VUE_APP_ROOT_API + 'branch.php?bank_id=' + this.$route.params.bankid + '&state=' + this.state + '&city=' + this.city)
+            axios.get(process.env.VUE_APP_ROOT_API + 'branch.php?bank_id=' + this.$route.params.bankid + '&state=' + this.state )
 
                 .then((response) => {
                     if (response.data.count > 0) {
